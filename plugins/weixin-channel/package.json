@@ -1,6 +1,6 @@
 {
   "name": "weixin-channel",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "description": "Claude Code channel: bridge personal WeChat (Tencent iLink protocol) into Claude Code sessions",
   "type": "module",
   "private": true,

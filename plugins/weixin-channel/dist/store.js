@@ -74,7 +74,7 @@ export function setContextToken(userId, token) {
     ensureDir(STATE_DIR);
     fs.writeFileSync(contextTokensPath(), JSON.stringify(tokenCache));
 }
-const DEFAULT_CHUNK_MAX = 500;
+const DEFAULT_CHUNK_MAX = 4000;
 function configPath() {
     return path.join(STATE_DIR, "config.json");
 }

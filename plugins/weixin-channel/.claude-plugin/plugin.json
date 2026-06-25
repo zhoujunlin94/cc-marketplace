@@ -2,7 +2,7 @@
   "name": "weixin-channel",
   "displayName": "WeChat iLink Channel",
   "description": "把个人微信消息（腾讯 iLink 协议）双向桥接到 Claude Code 会话：微信收到的消息作为 channel 事件注入会话，Claude 用 reply 工具回复到微信。",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "author": { "name": "zhoujunlin" },
   "license": "MIT",
   "mcpServers": {

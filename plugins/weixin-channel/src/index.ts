@@ -206,9 +206,11 @@ async function main() {
         };
       }
       try {
+        const start = Date.now();
         const n = await client.sendTextChunked(userId, text, ctx, config.chunkMaxLength);
-        log(`reply -> ${userId}: ${text.length} chars, ${n} 条消息`);
-        return { content: [{ type: "text" as const, text: `已发送回复 (${n} 条消息)` }] };
+        const ms = Date.now() - start;
+        log(`reply -> ${userId}: ${text.length} chars, ${n} 条, ${ms}ms`);
+        return { content: [{ type: "text" as const, text: `已发送回复 (${n} 条消息, ${ms}ms)` }] };
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
         log("reply 失败:", msg);

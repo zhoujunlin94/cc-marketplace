@@ -109,7 +109,7 @@ export type ChannelConfig = {
   chunkMaxLength: number;
 };
 
-const DEFAULT_CHUNK_MAX = 500;
+const DEFAULT_CHUNK_MAX = 4000;
 
 function configPath(): string {
   return path.join(STATE_DIR, "config.json");
