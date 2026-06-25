@@ -7,6 +7,11 @@
       "name": "db-plugin",
       "source": "./plugins/db-plugin",
       "description": "a database plugin"
+    },
+    {
+      "name": "weixin-channel",
+      "source": "./plugins/weixin-channel",
+      "description": "个人微信 iLink channel：把微信消息双向桥接到 Claude Code 会话"
     }
   ]
 }

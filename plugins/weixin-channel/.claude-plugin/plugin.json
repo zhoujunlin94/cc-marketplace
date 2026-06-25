@@ -1,0 +1,40 @@
+{
+  "name": "weixin-channel",
+  "displayName": "WeChat iLink Channel",
+  "description": "把个人微信消息（腾讯 iLink 协议）双向桥接到 Claude Code 会话：微信收到的消息作为 channel 事件注入会话，Claude 用 reply 工具回复到微信。",
+  "version": "0.1.4",
+  "author": { "name": "zhoujunlin" },
+  "license": "MIT",
+  "mcpServers": {
+    "weixin": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/dist/index.js"],
+      "cwd": "${CLAUDE_PLUGIN_DATA}"
+    }
+  },
+  "channels": [
+    {
+      "server": "weixin",
+      "userConfig": {
+        "allowed_senders": {
+          "type": "string",
+          "title": "允许的微信发送者 ID",
+          "description": "逗号分隔的 from_user_id 白名单。留空则仅允许登录账号自己。也可在 ~/.weixin-channel/config.json 的 allowed_senders 数组中配置。"
+        }
+      }
+    }
+  ],
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/install-deps.cjs\"",
+            "timeout": 300
+          }
+        ]
+      }
+    ]
+  }
+}
