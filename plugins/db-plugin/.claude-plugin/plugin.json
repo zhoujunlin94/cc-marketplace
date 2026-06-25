@@ -1,0 +1,8 @@
+{
+  "name": "db-plugin",
+  "displayName": "Database Plugin",
+  "description": "数据库相关",
+  "version": "1.0.0",
+  "author": { "name": "zhoujunlin" },
+  "license": "MIT"
+}

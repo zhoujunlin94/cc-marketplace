@@ -1,0 +1,12 @@
+{
+  "name": "cc-marketplace",
+  "owner": { "name": "zhoujunlin", "email": "zhoujunlin.work@gmail.com" },
+  "description": "zhoujunlin's marketplace for Claude Code plugins",
+  "plugins": [
+    {
+      "name": "db-plugin",
+      "source": "./plugins/db-plugin",
+      "description": "a database plugin"
+    }
+  ]
+}
