@@ -43,7 +43,12 @@
 /plugin install weixin-channel@cc-marketplace
 ```
 
-安装后 `SessionStart` hook（`scripts/install-deps.cjs`）会自动把运行时依赖装到 `${CLAUDE_PLUGIN_DATA}/node_modules`，并在 `package.json` 变化时重装。
+运行时依赖（`weixin-ilink` 等）**不需要手动安装**。两条路径都会自动装到 `${CLAUDE_PLUGIN_ROOT}/node_modules`（即插件代码所在目录）：
+
+- **MCP server 入口自举**（`dist/bootstrap.js`）：server 启动时先用 `node:` 内置模块检查依赖是否存在，缺失则在 `import` 真正的 server 之前同步跑 `npm install --omit=dev`。这保证了首次安装、`SessionStart` hook 未跑完等任何时序下 server 都不会因缺依赖而崩。
+- `SessionStart` hook（`scripts/install-deps.cjs`）：会话启动时若依赖缺失则重装，避免每次启动都重复检查。
+
+> **为什么装到 `CLAUDE_PLUGIN_ROOT` 而不是 `CLAUDE_PLUGIN_DATA`**：MCP server 代码位于 `${CLAUDE_PLUGIN_ROOT}/dist`，其 bare import（`import 'weixin-ilink'`）的解析规则是**从导入文件所在目录向上找 `node_modules`，与 `process.cwd()` 无关**。`plugin.json` 里 `cwd` 设的是 `CLAUDE_PLUGIN_DATA`，但 Node 的 ESM 解析不看 `cwd`——依赖若装在 data 目录，server 会 `ERR_MODULE_NOT_FOUND` 秒崩（Claude Code 报 `-32000`）。所以必须装到代码所在的 root 目录。
 
 ### 2. 启用 channel（按会话）
 
@@ -112,9 +117,10 @@ claude --dangerously-load-development-channels plugin:weixin-channel@cc-marketpl
 
 ```
 plugins/weixin-channel/
-├── .claude-plugin/plugin.json   # mcpServers + channels + SessionStart hook(install-deps)
-├── scripts/install-deps.cjs     # SessionStart: 装依赖到 ${CLAUDE_PLUGIN_DATA}
+├── .claude-plugin/plugin.json   # mcpServers(入口 dist/bootstrap.js) + channels + SessionStart hook
+├── scripts/install-deps.cjs     # SessionStart: 装依赖到 ${CLAUDE_PLUGIN_ROOT}（代码所在目录）
 ├── src/
+│   ├── bootstrap.ts             # server 入口：import server 前自举安装依赖（首次必装）
 │   ├── index.ts                 # channel MCP server：入站 poll、reply 工具、自动扫码
 │   ├── login-flow.ts            # 共用扫码流程（终端字符画 + PNG 兜底）
 │   ├── login-hook.ts            # （可选）SessionStart 扫码脚本，当前未挂载
